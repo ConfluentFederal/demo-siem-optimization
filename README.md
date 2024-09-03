@@ -4,7 +4,7 @@ The examples in this repository give you hands-on experience optimizing Security
 solutions using Confluent. Each tutorial illustrates how to use Confluent to improve the response to a common 
 cybersecurity scenario.
 
-## Starting up the environment
+## Starting up the environemnt
 
 This demonstration currently only runs on AMD64 platform Linux and requires docker and docker-compose to be installed.
 Because there are so many components running (Confluent Platform, zeek, Elastic, Confluent Sigma, and Splunk) you will 
@@ -12,8 +12,7 @@ want a fairly beefy box.  On AWS a m4.xlarge should do the trick.
 
 To run the demonstration clone this repository locally. If you are running this off a remote server you will need to 
 edit the docker-compose.yml to put the correct host name for the value `CONTROL_CENTER_KSQL_KSQLDB1_ADVERTISED_URL` 
-in the `control-center` section, or alternatively, `export CONTROL_CENTER_KSQL_KSQLDB1_ADVERTISED_URL="http://your-server.com:8088"`
-before running `docker-compose`.
+in the `control-center` section. 
 
 run docker-compose up -d
 
@@ -48,8 +47,4 @@ Run through entire end-to-end demo to get the big picture. Zoom in on the indivi
 ### Confluent Sigma
 
 - https://github.com/confluentinc/confluent-sigma
-
-### Confluent Documentation
-
-- https://docs.confluent.io/home/overview.html
 
