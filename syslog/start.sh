@@ -3,18 +3,14 @@
 # This script uses tcpreplay to replay packet capture (PCAP) files.
 # /pcaps/syslog.pcap must exist.
 
-echo "Create dummy network"
-ip link add dummy0 type dummy
-ifconfig dummy0 mtu 3000
-ifconfig dummy0 up
-
-echo "Listen on dummy network with zeek packet sniffer"
-/usr/local/zeek/bin/zeek -i dummy0 local "Site::local_nets += {192.168.1.0/24 }" &
-
 echo "Edit input syslog PCAP to simulate ssh attacks happening now"
 myether=$(ifconfig eth0 | grep ether | awk {'print $2'})
 mysubnet=$(ifconfig eth0 | grep 'inet ' | awk {'print $2'} | awk -F. {'print $1"."$2".0.0"'})
-connectip=$(python3 -c "import socket;addr1 = socket.gethostbyname('connect');s = socket.socket(socket.AF_INET, socket.SOCK_STREAM); s.connect((addr1,8083));print(addr1)")
+connectip=$(python3 -c "import socket;addr1 = socket.gethostbyname('connect');print(addr1)")
+
+# need to make a call to connect to host so it shows in the arp table - this will fail
+$(python3 -c "import socket;addr1 = socket.gethostbyname('connect');s = socket.socket(socket.AF_INET, socket.SOCK_STREAM); s.connect((addr1,8083));print(addr1)")
+
 connectmac=$(arp -a | grep connect | awk {'print $4'})
 input="/pcaps/syslog.pcap"
 output="/pcaps/edited_syslog.pcap"
@@ -29,9 +25,6 @@ echo "creating /pcaps/edited_syslog.pcap"
  --outfile=$output \
  --enet-dmac=$connectmac \
  --fixcsum
-
-echo "Replay zeek packet sniff from exfiltration exercise and send to Kafka via Zeek Kafka Plugin"
-/usr/bin/tcpreplay -i dummy0 --loop=1000000 /pcaps/zeek_streamer.pcap &
 
 echo "Replay the edited syslog PCAP"
 /usr/bin/tcpreplay -i eth0 --loop=1000000 $output &

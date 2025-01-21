@@ -2,7 +2,7 @@
     "name": "splunk-s2s-source",
     "config": {
       "connector.class": "io.confluent.connect.splunk.s2s.SplunkS2SSourceConnector",
-	"value.converter": "org.apache.kafka.connect.json.JsonConverter",
+	    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
         "value.converter.schemas.enable": "false"
     }
 }

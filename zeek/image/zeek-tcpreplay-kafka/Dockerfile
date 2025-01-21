@@ -20,6 +20,7 @@ RUN apt-get update && \
       swig \
       tcpreplay \
       zlib1g-dev \
+      netcat-traditional \
       && \
     rm -rf /var/lib/apt/lists/*
 
